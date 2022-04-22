@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import './styles/index.sass';
 import App from './App';
 
 const title = 'React with Webpack and Babel';
 
 ReactDOM.render(
-  <div>{title}</div>,
+  <App title={title} />,
   document.getElementById('app')
 );

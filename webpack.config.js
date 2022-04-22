@@ -1,41 +1,81 @@
 const path = require('path');
 
-var config = {
-  mode: 'production',
-  entry: path.resolve(__dirname, './src/index.js'),
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-  },
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: 'bundle.js',
-  },
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+
+let node = "development";
+let target = "web";
+let plugins = [
+		new CleanWebpackPlugin(),
+		new MiniCssExtractPlugin(),
+		new HtmlWebpackPlugin({
+			template: "./src/index.html"
+		}),
+];
+
+if(process.env.NODE_ENV === "production") {
+	node = "production";
+	target = ['web', 'es5'];
+	// target = ".browserslistrc";
+	
+} else {
+	plugins.push(new ReactRefreshWebpackPlugin());
+}
+
+module.exports = {
+	mode: node,
+	target: target,
+
+	entry: "./src/index.js",
+
+	output: {
+		path: path.join(__dirname, "dist"),
+		assetModuleFilename: "images/[hash][ext][query]",
+	},
+
+	module: {
+		rules: [
+			{
+				test: /\.(png|jpe?g|gif|svg)$/i,
+				type: "asset",  // "asset/inline",
+			},
+			{
+				test: /\.s[ac]ss$/i,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader, 
+						options: { publicPath: "" },
+					},
+					"css-loader", 
+					"sass-loader"
+				],
+			},
+			{
+				test: /\.[jt]sx?$/,
+				exclude: /node_modules/,
+				use: {
+					loader: "babel-loader"
+				},
+			},
+		]
+	},
+
+	plugins: plugins,
+
+	resolve: {
+		extensions: [".js", ".jsx"],
+	},
+
+	devtool: "source-map",
   devServer: {
-    static: path.resolve(__dirname, './dist'),
+  	static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    
+    compress: true,
+    port: 3000,
+    hot: true,
   },
-  plugins: [
-    // new webpack.DefinePlugin({
-    //   // Definitions...
-    // }),
-  ],
-};
-
-module.exports = (env, argv) => {
-  // if (argv.mode === 'development') {
-  //   config.devtool = 'source-map';
-  // }
-  // if (argv.mode === 'production') {
-  //   //...
-  // }
-
-  return config;
 };
