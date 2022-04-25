@@ -52,7 +52,7 @@ const config = {
       },
       {
         test: /\.(svg|png|gif|jpg)$/,
-        type: "asset",  // "asset/inline",
+        // type: "asset",  // "asset/inline",
         exclude: /fonts/,
         loader: 'file-loader'
       },
@@ -67,7 +67,8 @@ const config = {
 		new CleanWebpackPlugin(),
 		new MiniCssExtractPlugin({ filename: "main.[fullhash].css" }),
 		new HtmlWebpackPlugin({
-			template: "./src/index.html"
+			template: "./src/index.html",
+			favicon: "./src/images/react-img.jpg"
 		}),
 	],
 
