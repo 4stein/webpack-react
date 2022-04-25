@@ -1,11 +1,11 @@
 import React from 'react';
 import reactImg from './images/react-img.jpg';
 
-const App = ({ title }) => {
+const App = () => {
   return (
     <div>
     <div className="bg__img"></div>
-      <h1>{title}</h1>
+      <h1>123</h1>
       <img src={reactImg} alt="React Img" width="250"/> 
     </div>
   );

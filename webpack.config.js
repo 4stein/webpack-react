@@ -1,46 +1,39 @@
+const currentTask = process.env.npm_lifecycle_event
 const path = require('path');
-
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
-let node = "development";
-let target = "web";
-let plugins = [
-		new CleanWebpackPlugin(),
-		new MiniCssExtractPlugin(),
-		new HtmlWebpackPlugin({
-			template: "./src/index.html"
-		}),
-];
 
-if(process.env.NODE_ENV === "production") {
-	node = "production";
-	target = ['web', 'es5'];
-	// target = ".browserslistrc";
-	
-} else {
-	plugins.push(new ReactRefreshWebpackPlugin());
-}
-
-module.exports = {
-	mode: node,
-	target: target,
+const config = {
+	mode: "development",
+	target: "web",
 
 	entry: "./src/index.js",
 
-	output: {
-		path: path.join(__dirname, "dist"),
-		assetModuleFilename: "images/[hash][ext][query]",
-	},
+	devServer: {
+  	static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    
+    compress: true,
+    port: 3000,
+    hot: true,
+  },
 
 	module: {
 		rules: [
 			{
-				test: /\.(png|jpe?g|gif|svg)$/i,
-				type: "asset",  // "asset/inline",
-			},
+        test: /\.[jt]sx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [["@babel/preset-env", { "useBuiltIns": "usage", "corejs": 3, "targets": "defaults" }], "@babel/preset-react"]
+          }
+        }
+      },
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
@@ -53,29 +46,47 @@ module.exports = {
 				],
 			},
 			{
-				test: /\.[jt]sx?$/,
-				exclude: /node_modules/,
-				use: {
-					loader: "babel-loader"
-				},
-			},
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(svg|png|gif|jpg)$/,
+        type: "asset",  // "asset/inline",
+        exclude: /fonts/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.(ttf|eot|woff|svg|woff2)$/,
+        loader: "file-loader"
+      },
 		]
 	},
 
-	plugins: plugins,
+	plugins: [
+		new CleanWebpackPlugin(),
+		new MiniCssExtractPlugin({ filename: "main.[fullhash].css" }),
+		new HtmlWebpackPlugin({
+			template: "./src/index.html"
+		}),
+	],
 
 	resolve: {
-		extensions: [".js", ".jsx"],
+		extensions: [".js", ".jsx", ".tsx", ".ts"],
 	},
 
 	devtool: "source-map",
-  devServer: {
-  	static: {
-      directory: path.join(__dirname, "dist"),
-    },
-    
-    compress: true,
-    port: 3000,
-    hot: true,
-  },
+  output: {
+  	filename: "bundle.[fullhash].js",
+		path: path.join(__dirname, "dist"),
+		assetModuleFilename: "images/[fullhash][ext][query]",
+	},
 };
+
+if (currentTask == "build") {
+  config.mode = "production";
+  config.target = ['web', 'es5'];
+  config.plugins.push(new CleanWebpackPlugin(), new WebpackManifestPlugin());
+}
+
+module.exports = config;

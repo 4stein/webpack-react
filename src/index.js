@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom';
 import './styles/index.sass';
 import App from './App';
 
-const title = 'React with Webpack and Babel';
 
 ReactDOM.render(
-  <App title={title} />,
+  <App />,
   document.getElementById('app')
 );
+
+if (module.hot) {
+  module.hot.accept()
+}
