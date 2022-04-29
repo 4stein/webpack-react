@@ -1,12 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './styles/index.sass';
 import App from './App';
 
-// root
-const root = ReactDOM.createRoot(document.getElementById('app'));
-root.render(<App/>);
+// ReactDOM
+ReactDOM.render(
+  <App />,
+  document.getElementById("root")
+);
+
 // hot
 if (module.hot) {
   module.hot.accept()
 };
+
