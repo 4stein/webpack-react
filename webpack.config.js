@@ -17,7 +17,7 @@ const config = {
 	output: {
 		path: path.join(__dirname, "dist"),
 		filename: "[name][contenthash].js",
-		assetModuleFilename: "images/[fullhash][ext][query]",
+		assetModuleFilename: "images/[contenthash][ext][query]",
 		// clean: true,
 	},
 	devtool: "source-map",
@@ -36,6 +36,8 @@ const config = {
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
+					currentTask == "start" ? 
+					"style-loader" :
 					{
 						loader: MiniCssExtractPlugin.loader, 
 						options: { publicPath: "" },
@@ -60,10 +62,11 @@ const config = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(svg|png|gif|jpe?g)$/,
+        test: /\.(png|svg|jpe?g|gif)$/i,
+    	type: 'asset/resource',
         //type: "asset/resource", // "asset", // "asset/inline",
-        exclude: /fonts/,
-        loader: 'file-loader'
+        // exclude: /fonts/,
+        // loader: 'file-loader'
       },
       {
         test: /\.(ttf|eot|woff|svg|woff2)$/,
