@@ -61,7 +61,7 @@ const config = {
       },
       {
         test: /\.(svg|png|gif|jpe?g)$/,
-        type: "asset/resource", // "asset", // "asset/inline",
+        //type: "asset/resource", // "asset", // "asset/inline",
         exclude: /fonts/,
         loader: 'file-loader'
       },
