@@ -28,6 +28,7 @@ const config = {
     port: 3001,
     open: true,
     hot: true,
+    historyApiFallback: true,
   },
 
   module: {
