@@ -34,7 +34,33 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.module\.s[ac]ss$/i,
+        use: [
+          currentTask == "start"
+            ? "style-loader"
+            : {
+                loader: MiniCssExtractPlugin.loader,
+                options: { publicPath: "" },
+              },
+          {
+            loader: "css-loader",
+            options: {
+              /* modules: true */
+              importLoaders: 1,
+              modules: { localIdentName: "[local]__[sha1:hash:hex:7]" },
+            },
+          },
+          {
+            loader: "sass-loader",
+            // options: {
+            //   sourceMap: true,
+            // },
+          },
+        ],
+      },
+
+      {
+        test: /^((?!\.module).)*s[ac]ss$/i,
         use: [
           currentTask == "start"
             ? "style-loader"
