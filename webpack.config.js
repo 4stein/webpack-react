@@ -12,10 +12,20 @@ const config = {
 
   entry: {
     bundle: path.join(__dirname, "src/index.js"),
+    // another: path.join(__dirname, "src/another.jsx"),
+    // index: {
+    //   import: path.join(__dirname, "src/index.js"),
+    //   dependOn: 'shared',
+    // },
+    // test: {
+    //   import: path.join(__dirname, "src/Test.jsx"),
+    //   dependOn: 'shared',
+    // },
+    // shared: 'lodash',
   },
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "[name][contenthash].js",
+    filename: "[name].bundle[contenthash].js",
     assetModuleFilename: "images/[contenthash][ext][query]",
     // clean: true,
   },
@@ -119,6 +129,30 @@ const config = {
 
   resolve: {
     extensions: [".js", ".jsx", ".tsx", ".ts"],
+  },
+
+  optimization: {
+    splitChunks: {
+      chunks: "async",
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
 };
 
