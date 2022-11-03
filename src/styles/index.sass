@@ -1,0 +1,60 @@
+body
+	display: flex
+	flex-direction: column
+
+li
+	list-style-type: none
+
+.meeting-list
+	padding-top: 35px
+.time-item
+	height: 62px
+	position: relative
+	&-hour 
+		position: absolute
+		top: -7px
+	
+
+.meetings-box 
+	margin-left: 45px
+	display: flex
+.meeting-item 
+	display: flex
+	justify-content: space-between
+	width: 100%
+	padding: 7px 16px
+	background-color: #F0F0F0
+	border: 1px solid rgba(0, 0, 0, 0.12)
+	box-shadow: 0px 4px 10px rgb(42 42 114 / 15%)
+	border-radius: 12px
+	overflow: hidden
+	&-title
+		font-size: 16px
+		color: #000
+		margin-bottom: 0
+		white-space: nowrap
+	&-description
+		font-size: 14px
+		white-space: nowrap
+	&.list:hover
+		min-width: 300px
+		.meeting-item-btn 
+			display: block
+
+	&-btn 
+		border-radius: 100px
+		background-color: #2A2A72
+		border: none
+		height: 42px
+		&.none
+			display: none
+.meeting-item.active
+	background-color: #2A2A72
+	.meeting-item-title
+		color: #fff
+	.meeting-item-description
+		color: #fff
+	.meeting-item-btn
+		border: 1px solid #fff
+		
+	

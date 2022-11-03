@@ -1,18 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { BrowserRouter as Router } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './styles/index.sass';
+import App from './App';
 
-import "./index.css";
+// ReactDOM
+ReactDOM.render(<App />, document.getElementById('root'));
 
-import App from "./App";
-import { store } from "./store/store";
-
-ReactDOM.render(
-  <Router>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Router>,
-  document.getElementById("root")
-);
+// hot
+if (module.hot) {
+  module.hot.accept();
+}
